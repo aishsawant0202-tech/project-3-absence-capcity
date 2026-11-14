@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    container_name: absence-capacity-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: absence_capacity
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: change_me_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d absence_capacity"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: absence-capacity-backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://app_user:change_me_local@db:5432/absence_capacity
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: absence-capacity-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
