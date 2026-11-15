@@ -1,0 +1,22 @@
+# Environment variables and secrets
+.env
+
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Alembic
+# Keep migration scripts tracked
+
+# IDE
+.vscode/
+
+# Operating system
+.DS_Store
+Thumbs.db
+
