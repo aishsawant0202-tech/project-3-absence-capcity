@@ -1,10 +1,14 @@
 from fastapi import FastAPI
 
+from app.routers import teams
+
 app = FastAPI(
     title="Absence & Capacity API",
     description="Backend for the Project 3 Absence & Capacity application.",
     version="0.1.0",
 )
+
+app.include_router(teams.router)
 
 
 @app.get("/health", tags=["Health"])
