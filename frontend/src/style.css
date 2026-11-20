@@ -1,0 +1,148 @@
+:root {
+  font-family: Inter, system-ui, Arial, sans-serif;
+  color: #172033;
+  background: #f5f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 320px; }
+
+.container {
+  max-width: 760px;
+  margin: 12vh auto;
+  padding: 40px;
+  background: white;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(25, 40, 70, 0.06);
+}
+
+.eyebrow {
+  color: #5267a8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+h1 { margin: 12px 0; font-size: clamp(2rem, 5vw, 3rem); }
+.intro { color: #596579; line-height: 1.7; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eef8f0;
+  color: #236b38;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #2b9b4b;
+}
+
+/* --- Demo login bar (temporary, until Member 4's login) --- */
+.demo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin: 16px 0 28px;
+  padding: 10px 14px;
+  border: 1px dashed #c9d2e3;
+  border-radius: 10px;
+  background: #fafbfe;
+  font-size: 0.9rem;
+}
+.demo-tag { font-weight: 700; color: #5267a8; }
+.demo-bar input { width: 80px; }
+
+/* --- Pages and forms --- */
+h2 { margin: 0 0 16px; }
+.page-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.field label { font-weight: 600; }
+input, select, textarea {
+  font: inherit;
+  padding: 8px 10px;
+  border: 1px solid #c9d2e3;
+  border-radius: 8px;
+  background: white;
+  color: inherit;
+}
+input[aria-invalid="true"] { border-color: #c0392b; }
+
+.hint { margin: 0; color: #596579; font-size: 0.85rem; }
+.field-error { margin: 0; color: #c0392b; font-size: 0.9rem; }
+.form-error, .notice, .success { padding: 10px 14px; border-radius: 8px; }
+.form-error { background: #fdecea; color: #a5281b; }
+.notice { background: #fff6e0; color: #7a5a00; }
+.success { background: #eef8f0; color: #236b38; font-weight: 600; }
+
+.actions { display: flex; gap: 10px; }
+button {
+  font: inherit;
+  padding: 9px 18px;
+  border: 1px solid #c9d2e3;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+a.button {
+  display: inline-block;
+  padding: 9px 18px;
+  border: 1px solid #c9d2e3;
+  border-radius: 8px;
+  background: white;
+  color: inherit;
+  text-decoration: none;
+}
+button.primary { background: #3451b2; border-color: #3451b2; color: white; font-weight: 600; }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.team-card {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 20px;
+  padding: 16px;
+  border: 1px solid #e5eaf2;
+  border-radius: 10px;
+}
+.team-card dt { color: #596579; }
+.team-card dd { margin: 0; }
+.badge { padding: 2px 10px; border-radius: 999px; background: #eef8f0; color: #236b38; font-size: 0.85rem; font-weight: 600; }
+
+.badge-inactive { background: #eef0f4; color: #596579; }
+
+/* --- Team list (TM-02) --- */
+.search { width: 100%; margin: 4px 0 14px; }
+.empty { padding: 24px; text-align: center; color: #596579; border: 1px dashed #c9d2e3; border-radius: 10px; }
+table.data-table, table.teams { width: 100%; border-collapse: collapse; }
+table.data-table th, table.data-table td, table.teams th, table.teams td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #e5eaf2; }
+table.data-table th, table.teams th { color: #596579; font-size: 0.85rem; font-weight: 600; }
+table.data-table .num, table.teams .num { text-align: right; }
+tr.clickable { cursor: pointer; }
+tr.clickable:hover { background: #f5f7fb; }
+button.link { padding: 0; border: none; background: none; color: #3451b2; font-weight: 600; }
+.form-error button { margin-left: 8px; padding: 4px 12px; }
+
+/* --- Team details (TM-03) --- */
+h3 { margin: 28px 0 12px; }
+.back { display: inline-block; margin-bottom: 12px; color: #3451b2; font-weight: 600; text-decoration: none; }
+.badge-lead { margin-left: 8px; background: #e8edfb; color: #3451b2; }
+
+@media (max-width: 600px) {
+  .container { margin: 0; padding: 20px 16px; border-radius: 0; }
+}
+
+/* Wrap wide tables so they scroll sideways on small screens: <div className="table-scroll"><table ...></div> */
+.table-scroll { overflow-x: auto; }

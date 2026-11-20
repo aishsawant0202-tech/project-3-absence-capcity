@@ -1,0 +1,5 @@
+# Local files that must not go into the image
+.venv
+__pycache__
+.pytest_cache
+.env

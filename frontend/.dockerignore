@@ -1,0 +1,5 @@
+# Installed inside the image by "npm install" (Linux). Copying the local Windows
+# node_modules over them breaks Vite (wrong platform binaries).
+node_modules
+dist
+.env

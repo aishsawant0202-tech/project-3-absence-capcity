@@ -31,6 +31,8 @@ services:
   frontend:
     build: ./frontend
     container_name: absence-capacity-frontend
+    environment:
+      API_PROXY_TARGET: http://backend:8000   # vite.config.ts forwards /api to the backend container
     ports:
       - "5173:5173"
     depends_on:

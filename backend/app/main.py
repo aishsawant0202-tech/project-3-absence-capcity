@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.errors import register_error_handlers
 from app.routers import teams
 
 app = FastAPI(
@@ -7,6 +8,7 @@ app = FastAPI(
     description="Backend for the Project 3 Absence & Capacity application.",
     version="0.1.0",
 )
+register_error_handlers(app)  # every error -> {"error": {"code", "message", "details"}} (contract v2, 1.2)
 
 app.include_router(teams.router)
 
