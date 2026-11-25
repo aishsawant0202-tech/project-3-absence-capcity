@@ -22,6 +22,10 @@ FORBIDDEN = "FORBIDDEN"
 NOT_FOUND = "NOT_FOUND"
 TEAM_NAME_TAKEN = "TEAM_NAME_TAKEN"
 ALREADY_TEAM_LEAD = "ALREADY_TEAM_LEAD"
+# Employee codes (Member 3)
+EMAIL_TAKEN = "EMAIL_TAKEN"                 # 409: another employee already has this email
+EMPLOYEE_REF_TAKEN = "EMPLOYEE_REF_TAKEN"   # 409: another employee already has this reference
+TEAM_INACTIVE = "TEAM_INACTIVE"             # 409: employees cannot be added to an inactive team
 
 # Code for an HTTPException raised without ApiError (e.g. 404 for an unknown URL)
 _CODE_BY_STATUS = {400: VALIDATION_ERROR, 401: UNAUTHENTICATED, 403: FORBIDDEN, 404: NOT_FOUND}
