@@ -1,9 +1,34 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { Link, NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { DemoUser, getDemoUser, saveDemoUser } from "./api/client";
 import { Team } from "./api/teams";
 import DemoUserBar from "./components/DemoUserBar";
 import CreateEmployeePage from "./pages/CreateEmployeePage";
+=======
+
+import { useEffect, useState } from "react";
+import {
+  Link,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  clearToken,
+  getCurrentUser,
+  getToken,
+  type CurrentUser,
+  type DemoUser,
+} from "./api/client";
+
+
+import { Team } from "./api/teams";
+import LoginPage from "./pages/LoginPage";
+>>>>>>> origin/master
 import CreateTeamPage from "./pages/CreateTeamPage";
 import EditEmployeePage from "./pages/EditEmployeePage";
 import EmployeeDetailsPage from "./pages/EmployeeDetailsPage";
@@ -13,6 +38,7 @@ import EditTeamPage from "./pages/EditTeamPage";
 import TeamDetailsPage from "./pages/TeamDetailsPage";
 import TeamsPage from "./pages/TeamsPage";
 
+<<<<<<< HEAD
 /**
  * Pages and their addresses:
  *   /teams        team list (TM-02)
@@ -25,30 +51,94 @@ import TeamsPage from "./pages/TeamsPage";
  *   /employees/:id/edit  edit an employee / change team
  *   /my-profile          the logged-in employee's own profile
  */
+=======
+>>>>>>> origin/master
 function App() {
-  const [user, setUser] = useState<DemoUser>(getDemoUser);
-  const canCreate = user.role === "TEAM_LEAD";
+  const [user, setUser] = useState<CurrentUser | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
-  function changeUser(next: DemoUser) {
-    saveDemoUser(next);
-    setUser(next);
+  async function loadCurrentUser() {
+    const token = getToken();
+
+    if (!token) {
+      setUser(null);
+      setCheckingAuth(false);
+      return;
+    }
+
+    try {
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+    } catch {
+      clearToken();
+      setUser(null);
+    } finally {
+      setCheckingAuth(false);
+    }
   }
+
+    useEffect(() => {
+    void loadCurrentUser();
+  }, []);
+
+  function handleLoginSuccess() {
+    setCheckingAuth(true);
+    void loadCurrentUser();
+  }
+
+  function handleLogout() {
+    clearToken();
+    setUser(null);
+  }
+
+  if (checkingAuth) {
+    return <main className="container"><p>Loading...</p></main>;
+  }
+
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage onLoginSuccess={handleLoginSuccess} />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
+
+  const demoUser: DemoUser = {
+    role: user.role,
+    employeeId: user.employee_id,
+  };
+
+  const canCreate = user.role === "TEAM_LEAD";
 
   return (
     <main className="container">
       <p className="eyebrow">PROJECT 3</p>
       <h1>Absence &amp; Capacity</h1>
+<<<<<<< HEAD
       <DemoUserBar user={user} onChange={changeUser} />
       <nav className="main-nav" aria-label="Main">
         <NavLink to="/teams">Teams</NavLink>
         <NavLink to="/employees">Employees</NavLink>
         <NavLink to="/my-profile">My profile</NavLink>
       </nav>
+=======
+
+      <div className="user-info">
+        <span>
+          Logged in as <strong>{user.first_name} {user.last_name}</strong>
+          {" "}({user.role})
+        </span>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+>>>>>>> origin/master
 
       <Routes>
         <Route path="/" element={<Navigate to="/teams" replace />} />
+        <Route path="/login" element={<Navigate to="/teams" replace />} />
         <Route path="/teams" element={<TeamsRoute canCreate={canCreate} />} />
         <Route path="/teams/new" element={<CreateTeamRoute canCreate={canCreate} />} />
+<<<<<<< HEAD
         {/* key: reload the page when the demo user changes, because what they may see changes */}
         <Route path="/teams/:teamId" element={<TeamDetailsPage key={`${user.role}-${user.employeeId}`} user={user} />} />
         <Route path="/teams/:teamId/edit" element={<EditTeamPage user={user} />} />
@@ -58,16 +148,31 @@ function App() {
         <Route path="/employees/:employeeId" element={<EmployeeDetailsPage key={`${user.role}-${user.employeeId}`} user={user} />} />
         <Route path="/employees/:employeeId/edit" element={<EditEmployeePage user={user} />} />
         <Route path="/my-profile" element={<MyProfilePage key={`${user.role}-${user.employeeId}`} />} />
+=======
+        <Route
+          path="/teams/:teamId"
+          element={
+            <TeamDetailsPage
+              key={`${user.role}-${user.employee_id}`}
+              user={demoUser}
+            />
+          }
+        />
+        <Route
+          path="/teams/:teamId/edit"
+          element={<EditTeamPage user={demoUser} />}
+        />
+>>>>>>> origin/master
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </main>
   );
 }
 
-/** Team list; shows the success message when we come from "Create team". */
 function TeamsRoute({ canCreate }: { canCreate: boolean }) {
   const navigate = useNavigate();
   const created = (useLocation().state as { created?: Team } | null)?.created ?? null;
+
   return (
     <TeamsPage
       created={created}
@@ -80,6 +185,7 @@ function TeamsRoute({ canCreate }: { canCreate: boolean }) {
 
 function CreateTeamRoute({ canCreate }: { canCreate: boolean }) {
   const navigate = useNavigate();
+
   return (
     <CreateTeamPage
       canCreate={canCreate}
