@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-import { useState } from "react";
-import { Link, NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { DemoUser, getDemoUser, saveDemoUser } from "./api/client";
-import { Team } from "./api/teams";
-import DemoUserBar from "./components/DemoUserBar";
-import CreateEmployeePage from "./pages/CreateEmployeePage";
-=======
-
 import { useEffect, useState } from "react";
 import {
   Link,
+  NavLink,
   Navigate,
   Route,
   Routes,
@@ -28,31 +20,16 @@ import {
 
 import { Team } from "./api/teams";
 import LoginPage from "./pages/LoginPage";
->>>>>>> origin/master
-import CreateTeamPage from "./pages/CreateTeamPage";
+import CreateEmployeePage from "./pages/CreateEmployeePage";
 import EditEmployeePage from "./pages/EditEmployeePage";
 import EmployeeDetailsPage from "./pages/EmployeeDetailsPage";
 import EmployeesPage from "./pages/EmployeesPage";
 import MyProfilePage from "./pages/MyProfilePage";
+import CreateTeamPage from "./pages/CreateTeamPage";
 import EditTeamPage from "./pages/EditTeamPage";
 import TeamDetailsPage from "./pages/TeamDetailsPage";
 import TeamsPage from "./pages/TeamsPage";
 
-<<<<<<< HEAD
-/**
- * Pages and their addresses:
- *   /teams        team list (TM-02)
- *   /teams/new    create a team (TM-01)
- *   /teams/:id    team details and members (TM-03)
- *   /teams/:id/edit  edit a team (TM-04)
- *   /employees           employee directory (Member 3)
- *   /employees/new       add an employee
- *   /employees/:id       employee profile
- *   /employees/:id/edit  edit an employee / change team
- *   /my-profile          the logged-in employee's own profile
- */
-=======
->>>>>>> origin/master
 function App() {
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -115,14 +92,6 @@ function App() {
     <main className="container">
       <p className="eyebrow">PROJECT 3</p>
       <h1>Absence &amp; Capacity</h1>
-<<<<<<< HEAD
-      <DemoUserBar user={user} onChange={changeUser} />
-      <nav className="main-nav" aria-label="Main">
-        <NavLink to="/teams">Teams</NavLink>
-        <NavLink to="/employees">Employees</NavLink>
-        <NavLink to="/my-profile">My profile</NavLink>
-      </nav>
-=======
 
       <div className="user-info">
         <span>
@@ -131,24 +100,18 @@ function App() {
         </span>
         <button onClick={handleLogout}>Logout</button>
       </div>
->>>>>>> origin/master
+
+      <nav className="main-nav" aria-label="Main">
+        <NavLink to="/teams">Teams</NavLink>
+        <NavLink to="/employees">Employees</NavLink>
+        <NavLink to="/my-profile">My profile</NavLink>
+      </nav>
 
       <Routes>
         <Route path="/" element={<Navigate to="/teams" replace />} />
         <Route path="/login" element={<Navigate to="/teams" replace />} />
         <Route path="/teams" element={<TeamsRoute canCreate={canCreate} />} />
         <Route path="/teams/new" element={<CreateTeamRoute canCreate={canCreate} />} />
-<<<<<<< HEAD
-        {/* key: reload the page when the demo user changes, because what they may see changes */}
-        <Route path="/teams/:teamId" element={<TeamDetailsPage key={`${user.role}-${user.employeeId}`} user={user} />} />
-        <Route path="/teams/:teamId/edit" element={<EditTeamPage user={user} />} />
-        {/* Employee Management (Member 3); key: reload when the demo user changes */}
-        <Route path="/employees" element={<EmployeesPage user={user} />} />
-        <Route path="/employees/new" element={<CreateEmployeePage user={user} />} />
-        <Route path="/employees/:employeeId" element={<EmployeeDetailsPage key={`${user.role}-${user.employeeId}`} user={user} />} />
-        <Route path="/employees/:employeeId/edit" element={<EditEmployeePage user={user} />} />
-        <Route path="/my-profile" element={<MyProfilePage key={`${user.role}-${user.employeeId}`} />} />
-=======
         <Route
           path="/teams/:teamId"
           element={
@@ -162,7 +125,15 @@ function App() {
           path="/teams/:teamId/edit"
           element={<EditTeamPage user={demoUser} />}
         />
->>>>>>> origin/master
+        {/* Employee Management (Member 3) */}
+        <Route path="/employees" element={<EmployeesPage user={demoUser} />} />
+        <Route path="/employees/new" element={<CreateEmployeePage user={demoUser} />} />
+        <Route
+          path="/employees/:employeeId"
+          element={<EmployeeDetailsPage key={`${user.role}-${user.employee_id}`} user={demoUser} />}
+        />
+        <Route path="/employees/:employeeId/edit" element={<EditEmployeePage user={demoUser} />} />
+        <Route path="/my-profile" element={<MyProfilePage key={`${user.role}-${user.employee_id}`} />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </main>
