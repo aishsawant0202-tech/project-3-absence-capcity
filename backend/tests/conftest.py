@@ -6,18 +6,24 @@ No PostgreSQL needed to run the tests:  pytest
 import os
 from datetime import date
 
-os.environ.setdefault("DATABASE_URL", "sqlite://")  # must be set before importing app
+os.environ.setdefault("DATABASE_URL", "sqlite://")
 
 import pytest
+from fastapi import Header
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.database import Base, get_db
+from app.dependencies import CurrentUser, get_current_user
 from app.main import app
-from app.models import Employee, EmployeeStatus, EmploymentType
-
+from app.models import (
+    Employee,
+    EmployeeStatus,
+    EmploymentType,
+    SystemRole,
+)
 
 @pytest.fixture
 def db():
@@ -41,7 +47,7 @@ def client(db):
     app.dependency_overrides[get_db] = lambda: db
     with TestClient(app) as c:
         yield c
-    app.dependency_overrides.clear()
+    app.dependency_overrides.pop(get_db, None)
 
 
 @pytest.fixture
@@ -70,5 +76,32 @@ def make_employee(db):
 
 
 def headers(role: str, employee_id: int) -> dict[str, str]:
-    """Temporary test headers until real login exists."""
-    return {"X-Role": role, "X-Employee-Id": str(employee_id)}
+    """Generate test-only identity headers."""
+    return {
+        "X-Test-Role": role,
+        "X-Test-Employee-Id": str(employee_id),
+    }
+@pytest.fixture(autouse=True)
+def override_test_authentication():
+    def fake_current_user(
+        x_test_role: str | None = Header(default=None),
+        x_test_employee_id: int | None = Header(default=None),
+    ) -> CurrentUser:
+        if x_test_role is None or x_test_employee_id is None:
+            from app.errors import UNAUTHENTICATED, ApiError
+            raise ApiError(401, UNAUTHENTICATED, "Not logged in.")
+
+        try:
+            role = SystemRole(x_test_role)
+        except ValueError:
+            from app.errors import UNAUTHENTICATED, ApiError
+            raise ApiError(401, UNAUTHENTICATED, "Unknown role.")
+
+        return CurrentUser(
+            role=role,
+            employee_id=x_test_employee_id,
+        )
+
+    app.dependency_overrides[get_current_user] = fake_current_user
+    yield
+    app.dependency_overrides.pop(get_current_user, None)

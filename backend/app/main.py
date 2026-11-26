@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.errors import register_error_handlers
-from app.routers import employees, teams   # Load the team router and our new employee router
+from app.routers import auth, employees, teams   # Team, login (Member 4) and employee (Member 3) routers
 
 app = FastAPI(
     title="Absence & Capacity API",
@@ -11,6 +11,7 @@ app = FastAPI(
 register_error_handlers(app)  # every error -> {"error": {"code", "message", "details"}} (contract v2, 1.2)
 
 app.include_router(teams.router)
+app.include_router(auth.router)
 app.include_router(employees.router)       # Add the employee URLs (/api/v1/employees) to the app
 
 
