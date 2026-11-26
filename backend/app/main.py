@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.errors import register_error_handlers
-from app.routers import teams
+from app.routers import teams, auth
 
 app = FastAPI(
     title="Absence & Capacity API",
@@ -11,6 +11,7 @@ app = FastAPI(
 register_error_handlers(app)  # every error -> {"error": {"code", "message", "details"}} (contract v2, 1.2)
 
 app.include_router(teams.router)
+app.include_router(auth.router)
 
 
 @app.get("/health", tags=["Health"])

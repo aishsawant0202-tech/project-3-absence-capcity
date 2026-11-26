@@ -1,24 +1,25 @@
-"""Shared request dependencies: who is calling, and are they allowed?
+"""Shared request dependencies for authentication and authorization.
 
-TEMPORARY STUB: until Member 4's login is ready, the caller says who they are
-in two request headers:
-
-    X-Role: TEAM_LEAD          (EMPLOYEE / TEAM_LEAD / HR_ADMIN)
-    X-Employee-Id: 7
-
-TODO(Member 4): replace the inside of `get_current_user` with the real login
-(session or token). Endpoints using `require_role(...)` do not need to change.
-Development only - anyone can send these headers.
+Authentication uses JWT bearer tokens issued by the login endpoint.
+Authorization checks the authenticated user's role and team membership.
 """
-
 from dataclasses import dataclass
 
+import jwt
 from fastapi import Depends, Header
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.errors import FORBIDDEN, UNAUTHENTICATED, ApiError
-from app.models import SystemRole, Team
+from app.models import (
+    AccountStatus,
+    Employee,
+    EmployeeStatus,
+    SystemRole,
+    Team,
+    UserAccount,
+)
+from app.security import decode_access_token
 
 
 @dataclass(frozen=True)
@@ -27,18 +28,43 @@ class CurrentUser:
     employee_id: int
 
 
+
 def get_current_user(
-    x_role: str | None = Header(default=None),
-    x_employee_id: int | None = Header(default=None),
+    authorization: str | None = Header(default=None),
+    db: Session = Depends(get_db),
 ) -> CurrentUser:
-    """Return the caller. 401 UNAUTHENTICATED if we cannot tell who they are."""
-    if x_role is None or x_employee_id is None:
+    """Return the authenticated caller using a JWT bearer token."""
+
+    if not authorization or not authorization.startswith("Bearer "):
         raise ApiError(401, UNAUTHENTICATED, "Not logged in.")
+
+    token = authorization.removeprefix("Bearer ").strip()
+
     try:
-        role = SystemRole(x_role)
-    except ValueError:
-        raise ApiError(401, UNAUTHENTICATED, "Unknown role.")
-    return CurrentUser(role=role, employee_id=x_employee_id)
+        payload = decode_access_token(token)
+        user_id = int(payload["sub"])
+    except (jwt.InvalidTokenError, KeyError, TypeError, ValueError):
+        raise ApiError(
+            401,
+            UNAUTHENTICATED,
+            "Invalid or expired authentication token.",
+        )
+
+    account = db.get(UserAccount, user_id)
+
+    if account is None or account.status != AccountStatus.ACTIVE:
+        raise ApiError(401, UNAUTHENTICATED, "Account is not active.")
+
+    employee = db.get(Employee, account.employee_id)
+
+    if employee is None or employee.status != EmployeeStatus.ACTIVE:
+        raise ApiError(401, UNAUTHENTICATED, "Employee is not active.")
+
+    return CurrentUser(
+        role=account.system_role,
+        employee_id=account.employee_id,
+    )
+
 
 
 def require_role(*allowed: SystemRole):
