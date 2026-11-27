@@ -146,3 +146,160 @@ h3 { margin: 28px 0 12px; }
 
 /* Wrap wide tables so they scroll sideways on small screens: <div className="table-scroll"><table ...></div> */
 .table-scroll { overflow-x: auto; }
+
+
+/* =========================================
+   LOGIN PAGE
+========================================= */
+
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #eef2fa, #f8faff);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px;
+  background: #ffffff;
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  box-shadow: 0 15px 45px rgba(25, 40, 70, 0.09);
+}
+
+.login-card .eyebrow {
+  margin: 0 0 12px;
+  color: #3451b2;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.login-card h1 {
+  margin: 0 0 32px;
+  color: #172033;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+
+.login-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: #172033;
+}
+
+.login-card > p:not(.eyebrow) {
+  margin: 0 0 26px;
+  color: #596579;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-card form label {
+  margin-top: 8px;
+  color: #263248;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.login-card input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid #c9d2e3;
+  border-radius: 9px;
+  background: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-card input:focus {
+  border-color: #3451b2;
+  box-shadow: 0 0 0 3px rgba(52, 81, 178, 0.12);
+}
+
+.password-input {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+}
+
+.password-input input {
+  flex: 1;
+  min-width: 0;
+}
+
+.login-card .password-input button {
+  min-width: 75px;
+  padding: 10px 14px;
+  color: #3451b2;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid #c9d2e3;
+  border-radius: 9px;
+  background: #ffffff;
+}
+
+.login-card .password-input button:hover {
+  background: #f3f5fc;
+}
+
+.login-card form > button[type="submit"] {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 16px;
+  padding: 12px;
+  color: #ffffff;
+  background: #3451b2;
+  border: 1px solid #3451b2;
+  border-radius: 9px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.login-card form > button[type="submit"]:hover:not(:disabled) {
+  background: #263f91;
+}
+
+.login-card form > button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin: 8px 0 0;
+  padding: 11px 13px;
+  color: #a5281b;
+  background: #fdecea;
+  border: 1px solid #f5c6c2;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 26px 22px;
+  }
+
+  .login-card h1 {
+    font-size: 1.7rem;
+  }
+}
+
