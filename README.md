@@ -85,8 +85,7 @@ The frontend calls the backend through Vite's proxy: requests to `/api/...` are 
 `http://localhost:8000` (see `frontend/vite.config.ts`), so the backend must be running too. In Docker Compose
 the target is `http://backend:8000`, set with `API_PROXY_TARGET`.
 
-**Demo login (temporary):** the bar at the top of the page chooses the role and employee id that are sent as
-`X-Role` / `X-Employee-Id`. It will be replaced by Member 4's login.
+**Login :** Users can access the application by entering their registered username and password on the login page. After successful authentication, the system generates a JWT access token and allows the user to access the application based on their assigned role. 
 
 ## 4. API rules (all members)
 
@@ -122,9 +121,9 @@ VALUES ('Ada',  'Weber',   'ada@example.com',  'Manager',   'PERMANENT', 1.0, '2
 RETURNING id, first_name;
 ```
 
-**3. In the app** (http://localhost:5173) – set the **Demo login** before each step:
+**3. In the app** (http://localhost:5173) – log in using the appropriate test account before performing each test.
 
-| # | Demo login | Do | Expect |
+| # | Login Account | Action | Expected Result |
 |---|---|---|---|
 | 1 | `TEAM_LEAD` / Ada | Create team `Development`, FTE `5` | Success message, team in the list |
 | 2 | `TEAM_LEAD` / Ada | Create another team | "You already lead a team." |
@@ -185,6 +184,7 @@ Before committing, ensure `.env` and local secrets are not staged.
 - [ ] Swagger UI opens.
 - [ ] Frontend starts and displays the starter page.
 - [ ] Each member can run the project locally.
+- [ ] Implemented JWT-Based Authentication, Secure Login, and Session Management
 
 ## Next phase
 
