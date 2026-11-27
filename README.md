@@ -189,3 +189,8 @@ Before committing, ensure `.env` and local secrets are not staged.
 ## Next phase
 
 Phase 2 will add the agreed database model, SQLAlchemy models, Alembic migrations, Pydantic schemas, and the first CRUD APIs. Do not add business logic to this Phase 1 scaffold yet.
+
+## Employee Management (Member 3)
+
+- APIs: `/api/v1/employees` (Swagger, section Employees). Only `HR_ADMIN` can add, edit and deactivate.
+- Tests: in `backend` run `pip install -r requirements-dev.txt` once, then `pytest`.
